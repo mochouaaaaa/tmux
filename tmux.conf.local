@@ -51,7 +51,7 @@ tmux_conf_new_pane_reconnect_ssh=false
 # automatic detection relies on the COLORTERM environment variable being defined
 # to 'truecolor' or '24bit' or '$ tput colors' answering '16777216'
 # see https://github.com/termstandard/colors
-tmux_conf_24b_colour=auto
+tmux_conf_24b_colour=true
 
 
 # -- theming -------------------------------------------------------------------
@@ -215,14 +215,14 @@ tmux_conf_theme_window_status_last_bg="$tmux_conf_theme_colour_2"
 tmux_conf_theme_window_status_last_attr="none"
 
 # status left/right sections separators
-tmux_conf_theme_left_separator_main=""
-tmux_conf_theme_left_separator_sub="|"
-tmux_conf_theme_right_separator_main=""
-tmux_conf_theme_right_separator_sub="|"
-#tmux_conf_theme_left_separator_main='\uE0B0'  # /!\ you don't need to install Powerline
-#tmux_conf_theme_left_separator_sub='\uE0B1'   #   you only need fonts patched with
-#tmux_conf_theme_right_separator_main='\uE0B2' #   Powerline symbols or the standalone
-#tmux_conf_theme_right_separator_sub='\uE0B3'  #   PowerlineSymbols.otf font, see README.md
+# tmux_conf_theme_left_separator_main=""
+# tmux_conf_theme_left_separator_sub="|"
+# tmux_conf_theme_right_separator_main=""
+# tmux_conf_theme_right_separator_sub="|"
+tmux_conf_theme_left_separator_main='\uE0B0'  # /!\ you don't need to install Powerline
+tmux_conf_theme_left_separator_sub='\uE0B1'   #   you only need fonts patched with
+tmux_conf_theme_right_separator_main='\uE0B2' #   Powerline symbols or the standalone
+tmux_conf_theme_right_separator_sub='\uE0B3'  #   PowerlineSymbols.otf font, see README.md
 
 # status left/right content:
 #   - separate main sections with "|"
@@ -251,12 +251,19 @@ tmux_conf_theme_right_separator_sub="|"
 #     - #{uptime_s}
 #     - #{username}
 #     - #{username_ssh}
-tmux_conf_theme_status_left=" ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} "
-tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized}#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} "
+motto_fg='#[fg=#FFA500]'
+motto="${motto_fg}吾日三省..."
+
+# tmux_conf_theme_status_left=" ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} "
+tmux_conf_theme_status_left=" ❐ #S "
+# tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized}#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} "
+tmux_conf_theme_status_right=" #{prefix_highlight}#{mouse}#{pairing}#{synchronized}#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b , #{motto}"
 
 # status left style
 tmux_conf_theme_status_left_fg="$tmux_conf_theme_colour_6,$tmux_conf_theme_colour_7,$tmux_conf_theme_colour_8"
+# tmux_conf_theme_status_left_fg='#e4e4e4,#e4e4e4,#e4e4e4'
 tmux_conf_theme_status_left_bg="$tmux_conf_theme_colour_9,$tmux_conf_theme_colour_10,$tmux_conf_theme_colour_11"
+# tmux_conf_theme_status_left_bg=$nord0
 tmux_conf_theme_status_left_attr="bold,none,none"
 
 # status right style
@@ -295,10 +302,10 @@ tmux_conf_theme_synchronized_bg="none"
 tmux_conf_theme_synchronized_attr="none"
 
 # battery bar symbols
-tmux_conf_battery_bar_symbol_full="◼"
-tmux_conf_battery_bar_symbol_empty="◻"
-#tmux_conf_battery_bar_symbol_full="♥"
-#tmux_conf_battery_bar_symbol_empty="·"
+# tmux_conf_battery_bar_symbol_full="◼"
+# tmux_conf_battery_bar_symbol_empty="◻"
+tmux_conf_battery_bar_symbol_full="♥"
+tmux_conf_battery_bar_symbol_empty="·"
 
 # battery bar length (in number of symbols), possible values are:
 #   - auto
@@ -329,8 +336,8 @@ tmux_conf_battery_vbar_palette="gradient"
 # symbols used to indicate whether battery is charging or discharging
 tmux_conf_battery_status_charging="↑"       # U+2191
 tmux_conf_battery_status_discharging="↓"    # U+2193
-#tmux_conf_battery_status_charging="🔌"     # U+1F50C
-#tmux_conf_battery_status_discharging="🔋"  # U+1F50B
+# tmux_conf_battery_status_charging="🔌"     # U+1F50C
+# tmux_conf_battery_status_discharging="🔋"  # U+1F50B
 
 # clock style (when you hit <prefix> + t)
 # you may want to use %I:%M %p in place of %R in tmux_conf_theme_status_right
@@ -450,38 +457,49 @@ tmux_conf_uninstall_plugins_on_reload=true
 #
 #
 #修改快捷键
-# 修改分pane快捷键
-
-# 关闭自动改名规则
-setw -g automatic-rename off
-setw -g allow-rename off
 
 # 添加鼠标支持
-# set-option -g mouse on
+set-option -g mouse on
 
-# 调整pane大小
+# 配置 Vim 颜色兼容
+set-option -sa terminal-overrides ",xterm*:Tc"
 
-#bind-key -n M-h select-pane -L
-#bind-key -n M-l select-pane -R
-#bind-key -n M-k select-pane -U
-#bind-key -n M-j select-pane -D
+# 窗口重命名
+# unbind $
+# bind -r  command-prompt -I  "#W" { rename-window '%%' }
+bind % command-prompt -I  "#W" { rename-window '%%' }
 
-#bind -n -r M-Left resizep -L 5
-#bind -n -r M-Right resizep -R 5
+# 设置窗口面板起始序号
+set -g base-index 1 # 设置窗口的起始下标为1
+set -g pane-base-index 1 # 设置面板的起始下标为1
+
+# 自定义状态栏
+set-option -g status-position top
+set-option -g status-justify centre
+set -g status-interval 2 # 状态栏刷新时间
+setw -g monitor-activity on # 非当前窗口有内容更新时在状态栏通知
+set -g visual-activity on
+
+set -wg window-status-format " #I: #W " # 状态栏窗口名称格式
+set -wg window-status-current-format " #I:#W#F " # 状态栏当前窗口名称格式(#I：序号，#w：窗口名称，#F：间隔符)
+set -wg window-status-separator "" # 状态栏窗口名称之间的间隔
 
 
+set-environment -g PATH "/usr/local/bin:/bin:/usr/bin"
 #
 # List of plugins
 set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
 
 set -g @plugin 'aserowy/tmux.nvim'
+# tmux与nvim 绑定
 # navigation
 set -g @tmux-nvim-navigation true
 set -g @tmux-nvim-navigation-cycle true
-set -g @tmux-nvim-navigation-keybinding-left 'C-h' 
-set -g @tmux-nvim-navigation-keybinding-down 'C-j' 
-set -g @tmux-nvim-navigation-keybinding-up 'C-k' 
-set -g @tmux-nvim-navigation-keybinding-right 'C-l' 
+set -g @tmux-nvim-navigation-keybinding-left 'C-h'
+set -g @tmux-nvim-navigation-keybinding-down 'C-j'
+set -g @tmux-nvim-navigation-keybinding-up 'C-k'
+set -g @tmux-nvim-navigation-keybinding-right 'C-l'
 
 # resize
 set -g @tmux-nvim-resize true
@@ -499,15 +517,17 @@ set -g @continuum-save-interval '15'
 set -g @continuum-restore 'on'
 set -g @resurrect-capture-pane-contents 'on'
 
-# autoreload
-set -g @plugin 'b0o/tmux-autoreload'
-# Other examples:
-# set -g @plugin 'github_username/plugin_name'
-# set -g @plugin 'github_username/plugin_name#branch'
-# set -g @plugin 'git@github.com:user/plugin'
-# set -g @plugin 'git@bitbucket.com:user/plugin'
+# prefix mode
+set -g @plugin 'tmux-plugins/tmux-prefix-highlight'
+# set -g @prefix_highlight_fg 'white' # default is 'colour231'
+# set -g @prefix_highlight_bg 'blue'  # default is 'colour04'
+set -g @prefix_highlight_show_copy_mode 'on'
+# set -g @prefix_highlight_copy_mode_attr 'fg=black,bg=yellow,bold' # default is 'fg=default,bg=yellow'
+set -g @prefix_highlight_show_sync_mode 'on'
+# set -g @prefix_highlight_sync_mode_attr 'fg=black,bg=green' # default is 'fg=default,bg=yellow'
+set -g @prefix_highlight_prefix_prompt 'Wait'
+set -g @prefix_highlight_copy_prompt 'Copy'
+set -g @prefix_highlight_sync_prompt 'Sync'
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run '~/.config/tmux/plugins/tpm/tpm'
-# autoreload config
-set -g @tmux-autoreload-configs '~/.config/tmux/tmux.conf.local, ~/.config/tmux/tmux.conf'
